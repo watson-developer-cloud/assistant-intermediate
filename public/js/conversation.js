@@ -209,7 +209,7 @@ var ConversationPanel = (function () {
         for (i = 0; i < optionsList.length; i++) {
           if (optionsList[i].value) {
             list += '<li><div class="options-list" onclick="ConversationPanel.sendMessage(\'' +
-              optionsList[i].value.input.text + '\');" >' + optionsList[i].label + '</div></li>';
+            optionsList[i].value.input.text + '\');" >' + optionsList[i].label + '</div></li>';
           }
         }
         list += '</ul>';
@@ -290,7 +290,11 @@ var ConversationPanel = (function () {
       textArray.forEach(function (msg) {
         input += msg + ' ';
       });
-      input.trim().replace(' ', '<br>');
+      input = input.trim()
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+
       if (input.length !== 0) {
         responses.push({
           type: 'text',
