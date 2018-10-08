@@ -2,6 +2,7 @@
 // all display and behaviors of the conversation column of the app.
 /* eslint no-unused-vars: "off" */
 /* global Api: true, Common: true*/
+/* global UiActions: true, Common: true*/
 
 var ConversationPanel = (function () {
   var settings = {
@@ -139,6 +140,7 @@ var ConversationPanel = (function () {
   function setResponse(responses, isUser, chatBoxElement, index, isTop) {
     if (index < responses.length) {
       var res = responses[index];
+
       if (res.type !== 'pause') {
         var currentDiv = getDivObject(res, isUser, isTop);
         chatBoxElement.appendChild(currentDiv);
@@ -207,7 +209,7 @@ var ConversationPanel = (function () {
         for (i = 0; i < optionsList.length; i++) {
           if (optionsList[i].value) {
             list += '<li><div class="options-list" onclick="ConversationPanel.sendMessage(\'' +
-            optionsList[i].value.input.text + '\');" >' + optionsList[i].label + '</div></li>';
+              optionsList[i].value.input.text + '\');" >' + optionsList[i].label + '</div></li>';
           }
         }
         list += '</ul>';
@@ -278,6 +280,10 @@ var ConversationPanel = (function () {
         generic.forEach(function (gen) {
           getResponse(responses, gen);
         });
+      }
+      if (newPayload.output.hasOwnProperty('ui_action')) {
+        var ui_action = newPayload.output.ui_action;
+        UiActions.getUiAction(ui_action, responses);
       }
     } else if (newPayload.hasOwnProperty('input')) {
       var input = '';

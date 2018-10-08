@@ -20,6 +20,12 @@ var express = require('express'); // app server
 var bodyParser = require('body-parser'); // parser for post requests
 var AssistantV1 = require('watson-developer-cloud/assistant/v1'); // watson sdk
 
+var Actions = require('./functions/actions');
+var actions = new Actions();
+
+var BankFunctions = require('./functions/bankFunctions');
+var bankFunctions = new BankFunctions();
+
 var app = express();
 
 // Bootstrap application settings
@@ -32,6 +38,24 @@ var assistant = new AssistantV1({
   version: '2018-07-10'
 });
 
+var nextMonth = ((new Date().getMonth() + 1) % 12) + 1;
+var accountData = {
+  acc_minamt: 50,
+  acc_currbal: 430,
+  acc_paydue: '2018-' + nextMonth + '-26 12:00:00',
+  accnames: [
+    5624,
+    5893,
+    9225,
+  ],
+  private: {
+    function_creds: {
+      user: process.env.CLOUD_FUNCTION_USER,
+      password: process.env.CLOUD_FUNCTION_PASS,
+    },
+  },
+};
+
 // Endpoint to be call from the client side
 app.post('/api/message', function (req, res) {
   var workspace = process.env.WORKSPACE_ID || '<workspace-id>';
@@ -42,9 +66,12 @@ app.post('/api/message', function (req, res) {
       }
     });
   }
+
+  var contextWithAcc = Object.assign({}, req.body.context, accountData);
+
   var payload = {
     workspace_id: workspace,
-    context: req.body.context || {},
+    context: contextWithAcc || {},
     input: req.body.input || {}
   };
 
@@ -53,41 +80,29 @@ app.post('/api/message', function (req, res) {
     if (err) {
       return res.status(err.code || 500).json(err);
     }
+    actions.testForAction(data).then(function (d) {
+      return res.json(d);
+    }).catch(function (error) {
+      return res.json(error);
+    });
 
-    return res.json(updateMessage(payload, data));
   });
 });
 
-/**
- * Updates the response text using the intent confidence
- * @param  {Object} input The request to the Assistant service
- * @param  {Object} response The response from the Assistant service
- * @return {Object}          The response with the updated message
- */
-function updateMessage(input, response) {
-  var responseText = null;
-  if (!response.output) {
-    response.output = {};
+app.get('/bank/validate', function (req, res) {
+  var value = req.query.value;
+  var isAccValid = bankFunctions.validateAccountNumber(Number(value));
+  // if accountNum is in list of valid accounts
+  if (isAccValid === true) {
+    res.send({ result: 'acc123valid' });
   } else {
-    return response;
+    // return invalid by default
+    res.send({ result: 'acc123invalid' });
   }
-  if (response.intents && response.intents[0]) {
-    var intent = response.intents[0];
-    // Depending on the confidence of the response the app can return different messages.
-    // The confidence will vary depending on how well the system is trained. The service will always try to assign
-    // a class/intent to the input. If the confidence is low, then it suggests the service is unsure of the
-    // user's intent . In these cases it is usually best to return a disambiguation message
-    // ('I did not understand your intent, please rephrase your question', etc..)
-    if (intent.confidence >= 0.75) {
-      responseText = 'I understood your intent was ' + intent.intent;
-    } else if (intent.confidence >= 0.5) {
-      responseText = 'I think your intent was ' + intent.intent;
-    } else {
-      responseText = 'I did not understand your intent';
-    }
-  }
-  response.output.text = responseText;
-  return response;
-}
+});
+
+app.get('/bank/locate', function (req, res) {
+  res.send({ result: 'zip123retrieved' });
+});
 
 module.exports = app;

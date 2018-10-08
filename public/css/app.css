@@ -461,3 +461,34 @@ html{
   cursor: pointer;
   display: inline-block;
 }
+
+.card {
+  background: #eeeeee;
+  color: black;
+}
+
+.card-content {
+  background: #d3d2d3;
+  padding: 2%;
+}
+
+.card-item {
+  color: black;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  font-size: 0.85rem;
+}
+
+.appoitment-item {
+  color: black;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  font-size: 0.95rem;
+}
+
+.card-header {
+  padding: 3%;
+}
