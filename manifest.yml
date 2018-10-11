@@ -1,5 +1,5 @@
 applications:
-- name: watson-assistant-bank
+- name: watson-assistant-intermediate
   command: npm start
   path: .
   memory: 256M
