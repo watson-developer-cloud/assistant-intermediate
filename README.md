@@ -146,7 +146,7 @@ Find more open source projects on the
 [IBM Github Page](http://ibm.github.io/).
 
 
-[demo_url]: http://conversation-intermediate.ng.bluemix.net/
+[demo_url]: https://assistant-intermediate.ng.bluemix.net/
 [doc_intents]: (https://console.bluemix.net/docs/services/conversation/intents-entities.html#planning-your-entities)
 [docs]: https://console.bluemix.net/docs/services/conversation/index.html
 [docs_landing]: (https://console.bluemix.net/docs/services/conversation/index.html)
