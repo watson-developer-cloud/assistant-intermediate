@@ -1,8 +1,8 @@
 <h1 align="center" style="border-bottom: none;">🚀 Watson Assistant (formerly Conversation) Sample Application</h1>
 <h3 align="center">This Node.js app demonstrates the Watson Assistant service in a simple interface engaging in simulated banking tasks, utilising features such as cloud functions and actions.</h3>
 <p align="center">
-  <a href="http://travis-ci.org/watson-developer-cloud/assistant-simple">
-    <img alt="Travis" src="https://travis-ci.org/watson-developer-cloud/assistant-simple.svg?branch=master">
+  <a href="http://travis-ci.org/watson-developer-cloud/assistant-intermediate">
+    <img alt="Travis" src="https://travis-ci.org/watson-developer-cloud/assistant-intermediate.svg?branch=master">
   </a>
   <a href="#badge">
     <img alt="semantic-release" src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg">
@@ -41,7 +41,7 @@ You can view a [demo][demo_url] of this app.
 
 5. Click the ![Copy](readme_images/copy_icon.png) icon to copy the workspace ID to the clipboard.
 
-    ![Steps to get credentials](readme_images/assistant-simple.gif)
+    ![Steps to get credentials](readme_images/assistant-intermediate.gif)
 
 6. In the application folder, copy the *.env.example* file and create a file called *.env*
 

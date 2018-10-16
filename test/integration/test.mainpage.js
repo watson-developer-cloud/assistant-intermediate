@@ -15,7 +15,7 @@
  */
 /* eslint no-undef: 0 */
 
-casper.test.begin('Watson Assistant simple Demo', 5, function suite(test) {
+casper.test.begin('Watson Assistant Intermediate Demo', 5, function suite(test) {
   var baseHost = 'http://localhost:3000';
 
   function testWelcomeMessageExists() {
@@ -38,8 +38,8 @@ casper.test.begin('Watson Assistant simple Demo', 5, function suite(test) {
 
   casper.start(baseHost, function () {
     casper.test.comment('Starting Testing');
-    test.assertHttpStatus(200, 'assistant-simple is up');
-    test.assertTitle('Watson Assistant Chat App', 'Title is correct');
+    test.assertHttpStatus(200, 'assistant-intermediate is up');
+    test.assertTitle('Watson Assistant Intermediate App', 'Title is correct');
 
     testWelcomeMessageExists();
     testEnterMessageClick();
