@@ -21,8 +21,8 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "dotenv": "^6.1.0",
-    "express": "^4.16.3",
-    "watson-developer-cloud": "^3.10.0"
+    "express": "^4.16.4",
+    "watson-developer-cloud": "^3.13.0"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
@@ -32,7 +32,7 @@
     "babel-eslint": "^10.0.1",
     "casperjs": "^1.1.4",
     "codecov": "^3.1.0",
-    "eslint": "^5.6.1",
+    "eslint": "^5.8.0",
     "jest": "^23.6.0",
     "phantomjs-prebuilt": "^2.1.16",
     "supertest": "^3.3.0"
