@@ -37,12 +37,12 @@ app.use(bodyParser.json());
 var assistant = new AssistantV1({
   version: '2018-07-10'
 });
-
-var nextMonth = ((new Date().getMonth() + 1) % 12) + 1;
+var date = new Date();
+date.setMonth(date.getMonth() + 1);
 var accountData = {
   acc_minamt: 50,
   acc_currbal: 430,
-  acc_paydue: '2018-' + nextMonth + '-26 12:00:00',
+  acc_paydue: date.getFullYear() + '-' + (date.getMonth() + 1) + '-26 12:00:00',
   accnames: [
     5624,
     5893,
