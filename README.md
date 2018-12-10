@@ -14,6 +14,10 @@
 
 You can view a [demo][demo_url] of this app.
 
+Please note this app uses the [Watson Assistant V2 API](https://console.bluemix.net/apidocs/assistant-v2#introduction). To access a version of the V1 app, you can go to [v1.1.0](https://github.com/watson-developer-cloud/assistant-intermediate/releases/tag/v1.1.0).
+
+If you need more information about the V1 API, you can go to the [Watson Assistant V1 API page](https://cloud.ibm.com/apidocs/assistant#introduction).
+
 
 ## Prerequisites
 
