@@ -28,9 +28,12 @@ var ConversationPanel = (function () {
   // Initialize the module
   function init() {
     chatUpdateSetup();
-    Api.sendRequest('', null);
+    Api.getSessionId(function() {
+      Api.sendRequest('', null);
+    });
     setupInputBox();
   }
+
   // Set up callbacks on payload setters in Api module
   // This causes the displayMessage function to be called when messages are sent / received
   function chatUpdateSetup() {
@@ -118,9 +121,8 @@ var ConversationPanel = (function () {
   // Display a user or Watson message that has just been sent/received
   function displayMessage(newPayload, typeValue) {
     var isUser = isUserMessage(typeValue);
-    var textExists = (newPayload.input && newPayload.input.text) ||
-      (newPayload.output && newPayload.output.text);
-    if (isUser !== null && textExists) {
+    //var textExists = newPayload.generic;
+    if ((newPayload.output && newPayload.output.generic) ||  newPayload.input){
       // Create new message generic elements
       var responses = buildMessageDomElements(newPayload, isUser);
       var chatBoxElement = document.querySelector(settings.selectors.chatBox);
@@ -147,7 +149,10 @@ var ConversationPanel = (function () {
         // Class to start fade in animation
         currentDiv.classList.add('load');
         // Move chat to the most recent messages when new messages are added
-        scrollToChatBottom();
+        setTimeout(function () {
+          // wait a sec before scrolling
+          scrollToChatBottom();
+        }, 1000);
         setResponse(responses, isUser, chatBoxElement, index + 1, false);
       } else {
         var userTypringField = document.getElementById('user-typing-field');
@@ -214,6 +219,7 @@ var ConversationPanel = (function () {
         }
         list += '</ul>';
       } else if (preference === 'button') {
+        
         list = '<br>';
         for (i = 0; i < optionsList.length; i++) {
           if (optionsList[i].value) {
@@ -225,6 +231,20 @@ var ConversationPanel = (function () {
       }
     }
     return list;
+  }
+
+  function getSearch(header, results) {
+    var resList = '<strong>'  + header + '</strong>';
+    // only show top 3 results
+    for (var i = 0; i < results.length && i < 3; i += 1) {
+      var res = results[i];
+      resList += '<div class="search-item">' +
+        '<strong>' + res.title + '</strong>' +
+        '<br>' + ((res.body.length > 200) ? res.body.substring(0, 120) + '...' : res.body) +
+        ((res.url !== null && res.url.length > 0) ? '<br><a href="' + res.url + '" target="_blank">' + res.url + '</a>': '') +
+        '</div>';
+    }
+    return resList;
   }
 
   function getResponse(responses, gen) {
@@ -260,6 +280,11 @@ var ConversationPanel = (function () {
         type: gen.response_type,
         innerhtml: title + list
       });
+    } else if (gen.response_type === 'search') {
+      responses.push({
+        type: gen.response_type,
+        innerhtml: getSearch(gen.header, gen.results)
+      });
     }
   }
 
@@ -281,8 +306,8 @@ var ConversationPanel = (function () {
           getResponse(responses, gen);
         });
       }
-      if (newPayload.output.hasOwnProperty('ui_action')) {
-        var ui_action = newPayload.output.ui_action;
+      if (newPayload.output.hasOwnProperty('user_defined') && newPayload.output.user_defined.hasOwnProperty('ui_action')) {
+        var ui_action = newPayload.output.user_defined.ui_action;
         UiActions.getUiAction(ui_action, responses);
       }
     } else if (newPayload.hasOwnProperty('input')) {
@@ -294,7 +319,6 @@ var ConversationPanel = (function () {
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
-
       if (input.length !== 0) {
         responses.push({
           type: 'text',

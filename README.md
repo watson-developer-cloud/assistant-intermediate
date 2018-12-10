@@ -83,10 +83,10 @@ You can view a [demo][demo_url] of this app.
     ASSISTANT_IAM_URL=https://gateway-syd.watsonplatform.net/assistant/api
     ```
 
-8. Add the `WORKSPACE_ID` to the previous properties
+8. Add the `ASSISTANT_ID` to the previous properties
 
     ```
-    WORKSPACE_ID=522be-7b41-ab44-dec3-g1eab2ha73c6
+    ASSISTANT_ID=522be-7b41-ab44-dec3-g1eab2ha73c6
     ```
 
 ## Running locally
