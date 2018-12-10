@@ -19,11 +19,10 @@ function actions() {
 
   var http = require('http');
 
-  this.testForAction = function (data) {
+  this.testForAction = function (data, sessionId) {
     return new Promise(function (resolve, reject) {
-      if (data.hasOwnProperty('actions')) {
-        //console.log(JSON.stringify(data.actions, null, 2));
-        data.actions.forEach(function (action) {
+      if (data.output.hasOwnProperty('actions')) {
+        data.output.actions.forEach(function (action) {
           var endPoint = '';
           var value = '';
           var sendType = '';
@@ -31,12 +30,12 @@ function actions() {
             endPoint = '/bank/validate';
             value = action.parameters.chosen_acc;
             sendType = action.result_variable;
-            bankCalls(endPoint, value, sendType, data, resolve, reject);
+            bankCalls(endPoint, value, sendType, data, sessionId, resolve, reject);
           } else if (action.name === 'RetrieveZip') {
             endPoint = '/bank/locate';
             value = action.parameters.zip_value;
             sendType = action.result_variable;
-            bankCalls(endPoint, value, sendType, data, resolve, reject);
+            bankCalls(endPoint, value, sendType, data, sessionId, resolve, reject);
           }
         });
       } else {
@@ -45,10 +44,9 @@ function actions() {
     });
   };
 
-  function bankCalls(endPoint, value, sendType, data, resolve, reject) {
+  function bankCalls(endPoint, value, sendType, data, sessionId, resolve, reject) {
     // construct the endpoint based on which client action
     var parameterizedEndpoint = endPoint + '?value=' + value;
-
     http.get({
       path: parameterizedEndpoint,
       port: process.env.PORT || 3000,
@@ -57,7 +55,7 @@ function actions() {
       }
     }, function (resp) {
       resp.on('data', function (res) {
-        sendMessage(JSON.parse(res), value, sendType, data.context, resolve, reject);
+        sendMessage(JSON.parse(res), value, sendType, data.context, sessionId, resolve, reject);
       });
       resp.on('end', function () {
       });
@@ -66,14 +64,15 @@ function actions() {
     });
   }
 
-  function sendMessage(res, value, sendType, context, resolve, reject) {
+  function sendMessage(res, value, sendType, context, sessionId, resolve, reject) {
     var parameterizedEndpoint = '/api/message';
 
     var payloadToWatson = {
-      'context': context
+      'context': context,
+      'session_id': sessionId
     };
 
-    payloadToWatson.input = {};
+    payloadToWatson.input = {text : ''};
 
     if (sendType === 'input.text') {
       payloadToWatson.input.text = res.result;
