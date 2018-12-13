@@ -1,6 +1,8 @@
+---
 applications:
 - name: watson-assistant-intermediate
   command: npm start
+  buildpack: sdk-for-nodejs
   path: .
   memory: 256M
   instances: 1

@@ -18,10 +18,13 @@
 
 var express = require('express'); // app server
 var bodyParser = require('body-parser'); // parser for post requests
-var AssistantV2 = require('watson-developer-cloud/assistant/v2'); // watson sdk
+var AssistantV2 = require('ibm-watson/assistant/v2'); // watson sdk
 
 var Actions = require('./functions/actions');
 var actions = new Actions();
+
+var SearchDocs = require('./functions/searchDocs');
+var searchDocs = new SearchDocs();
 
 var BankFunctions = require('./functions/bankFunctions');
 var bankFunctions = new BankFunctions();
@@ -77,8 +80,6 @@ app.post('/api/message', function (req, res) {
     contextWithAcc.global.system.turn_count += 1;
   }
 
-  //console.log(JSON.stringify(contextWithAcc, null, 2));
-
   var textIn = '';
 
   if(req.body.input) {
@@ -97,16 +98,19 @@ app.post('/api/message', function (req, res) {
       }
     }
   };
- 
+
   // Send the input to the assistant service
   assistant.message(payload, function (err, data) {
     if (err) {
       return res.status(err.code || 500).json(err);
     }
-    actions.testForAction(data, req.body.session_id).then(function (d) {
-      return res.json(d);
-    }).catch(function (error) {
-      return res.json(error);
+
+    searchDocs.addDocs(data, function () {
+      actions.testForAction(data, req.body.session_id).then(function (d) {
+        return res.json(d);
+      }).catch(function (error) {
+        return res.json(error);
+      });
     });
   });
 });
