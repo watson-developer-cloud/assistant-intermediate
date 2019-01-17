@@ -48,6 +48,10 @@ var ConversationPanel = (function () {
       currentResponsePayloadSetter.call(Api, newPayloadStr);
       displayMessage(JSON.parse(newPayloadStr), settings.authorTypes.watson);
     };
+
+    Api.setErrorPayload = function (newPayload) {
+      displayMessage(newPayload, settings.authorTypes.watson);
+    };
   }
 
   // Set up the input box to underline text as it is typed
