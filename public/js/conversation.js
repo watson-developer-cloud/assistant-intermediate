@@ -252,15 +252,18 @@ var ConversationPanel = (function () {
   }
 
   function getResponse(responses, gen) {
-    var title = '';
+    var title = '', description = '';
     if (gen.hasOwnProperty('title')) {
       title = gen.title;
+    }
+    if (gen.hasOwnProperty('description')) {
+      description = '<div>' + gen.description + '</div>';
     }
     if (gen.response_type === 'image') {
       var img = '<div><img src="' + gen.source + '" width="300"></div>';
       responses.push({
         type: gen.response_type,
-        innerhtml: title + img
+        innerhtml: title + description + img
       });
     } else if (gen.response_type === 'text') {
       responses.push({
@@ -282,7 +285,7 @@ var ConversationPanel = (function () {
       var list = getOptions(gen.options, preference);
       responses.push({
         type: gen.response_type,
-        innerhtml: title + list
+        innerhtml: title + description + list
       });
     } else if (gen.response_type === 'search') {
       responses.push({
