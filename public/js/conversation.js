@@ -245,7 +245,7 @@ var ConversationPanel = (function () {
       resList += '<div class="search-item">' +
         '<strong>' + res.title + '</strong>' +
         '<br>' + ((res.body.length > 200) ? res.body.substring(0, 120) + '...' : res.body) +
-        ((res.url !== null && res.url.length > 0) ? '<br><a href="' + res.url + '" target="_blank">' + res.url + '</a>': '') +
+        '<br><a href="docs/doc' + (i + 1)+ '.html" target="_blank">Full document</a>' +
         '</div>';
     }
     return resList;
