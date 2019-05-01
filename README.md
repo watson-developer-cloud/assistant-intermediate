@@ -151,9 +151,9 @@ Find more open source projects on the
 
 
 [demo_url]: https://assistant-intermediate.ng.bluemix.net/
-[doc_intents]: (https://console.bluemix.net/docs/services/conversation/intents-entities.html#planning-your-entities)
-[docs]: https://console.bluemix.net/docs/services/conversation/index.html
-[docs_landing]: (https://console.bluemix.net/docs/services/conversation/index.html)
+[doc_intents]: (https://cloud.ibm.com/docs/services/conversation/intents-entities.html#planning-your-entities)
+[docs]: https://cloud.ibm.com/docs/services/assistant?topic=assistant-index
+[docs_landing]: (https://cloud.ibm.com/docs/services/assistant?topic=assistant-index)
 [node_link]: (http://nodejs.org/)
 [npm_link]: (https://www.npmjs.com/)
-[sign_up]: bluemix.net/registration
+[sign_up]: cloud.ibm.com/registration
