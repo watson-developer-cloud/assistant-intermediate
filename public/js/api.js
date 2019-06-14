@@ -48,10 +48,11 @@ var Api = (function() {
   }
 
   // Send a message request to the server
-  function sendRequest(text, context) {
+  function sendRequest(text, isFirstCall) {
     // Build request payload
     var payloadToWatson = {
-      session_id: sessionId
+      session_id: sessionId,
+      firstCall: isFirstCall
     };
 
     payloadToWatson.input = {
@@ -59,10 +60,7 @@ var Api = (function() {
       text: text,
     };
 
-    if (context) {
-      payloadToWatson.context = context;
-    }
-
+    
     // Built http request
     var http = new XMLHttpRequest();
     http.open('POST', messageEndpoint, true);

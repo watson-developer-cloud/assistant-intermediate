@@ -37,16 +37,11 @@ app.use(bodyParser.json());
 
 // Create the service wrapper
 var assistant = new AssistantV2({
-  version: '2018-11-08'
+  version: '2019-02-28'
 });
 var date = new Date();
 date.setMonth(date.getMonth() + 1);
-var newContext = {
-  global : {
-    system : {
-      turn_count : 1
-    }
-  },
+var initContext = {
   skills: {
     'main skill': {
       user_defined: {
@@ -63,7 +58,11 @@ var newContext = {
   }
 };
 
-// Endpoint to be call from the client side
+/* 
+ * Endpoint to be call from the client side.
+ * Required.body.firstcall is set when initialising chat and sends initial context (initContext)
+ * Context is then set when required for actions.
+ */
 app.post('/api/message', function (req, res) {
   var assistantId = process.env.ASSISTANT_ID || '<assistant-id>';
   if (!assistantId || assistantId === '<assistant-id>') {
@@ -72,12 +71,6 @@ app.post('/api/message', function (req, res) {
         'text': 'The app has not been configured with a <b>ASSISTANT_ID</b> environment variable. Please refer to the ' + '<a href="https://github.com/watson-developer-cloud/assistant-intermediate">README</a> documentation on how to set this variable. <br>' + 'Once a workspace has been defined the intents may be imported from ' + '<a href="https://github.com/watson-developer-cloud/assistant-intermediate/blob/master/training/banking_workspace.json">here</a> in order to get a working application.'
       }
     });
-  }
-
-  var contextWithAcc = (req.body.context) ? req.body.context : newContext;
-
-  if (req.body.context) {
-    contextWithAcc.global.system.turn_count += 1;
   }
 
   var textIn = '';
@@ -89,15 +82,15 @@ app.post('/api/message', function (req, res) {
   var payload = {
     assistant_id: assistantId,
     session_id: req.body.session_id,
-    context: contextWithAcc,
     input: {
       message_type : 'text',
       text : textIn,
-      options : {
-        return_context : true
-      }
     }
   };
+
+  if (req.body.firstCall || req.body.context) {
+    payload.context =  req.body.context || initContext;    
+  }
 
   // Send the input to the assistant service
   assistant.message(payload, function (err, data) {
