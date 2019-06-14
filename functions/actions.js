@@ -30,12 +30,12 @@ function actions() {
             endPoint = '/bank/validate';
             value = action.parameters.chosen_acc;
             sendType = action.result_variable;
-            bankCalls(endPoint, value, sendType, data, sessionId, resolve, reject);
+            bankCalls(endPoint, value, sendType, sessionId, resolve, reject);
           } else if (action.name === 'RetrieveZip') {
             endPoint = '/bank/locate';
             value = action.parameters.zip_value;
             sendType = action.result_variable;
-            bankCalls(endPoint, value, sendType, data, sessionId, resolve, reject);
+            bankCalls(endPoint, value, sendType, sessionId, resolve, reject);
           }
         });
       } else {
@@ -44,7 +44,7 @@ function actions() {
     });
   };
 
-  function bankCalls(endPoint, value, sendType, data, sessionId, resolve, reject) {
+  function bankCalls(endPoint, value, sendType, sessionId, resolve, reject) {
     // construct the endpoint based on which client action
     var parameterizedEndpoint = endPoint + '?value=' + value;
     http.get({
@@ -55,7 +55,7 @@ function actions() {
       }
     }, function (resp) {
       resp.on('data', function (res) {
-        sendMessage(JSON.parse(res), value, sendType, data.context, sessionId, resolve, reject);
+        sendMessage(JSON.parse(res), value, sendType, sessionId, resolve, reject);
       });
       resp.on('end', function () {
       });
@@ -64,14 +64,13 @@ function actions() {
     });
   }
 
-  function sendMessage(res, value, sendType, context, sessionId, resolve, reject) {
+  function sendMessage(res, value, sendType, sessionId, resolve, reject) {
     var parameterizedEndpoint = '/api/message';
 
     var payloadToWatson = {
-      'context': context,
       'session_id': sessionId
     };
-
+    
     payloadToWatson.input = {text : ''};
 
     if (sendType === 'input.text') {
@@ -79,7 +78,8 @@ function actions() {
     } else if (sendType.includes('context.')) {
       var name = sendType.substring(sendType.indexOf('.') + 1);
       payloadToWatson.input.text = res.result;
-      payloadToWatson.context[name] = value;
+      payloadToWatson.context = {'skills' : {'main skill' : {'user_defined' : {}}}};
+      payloadToWatson.context.skills['main skill'].user_defined[name] = value;
     }
 
     var dataStr = JSON.stringify(payloadToWatson);

@@ -29,7 +29,7 @@ var ConversationPanel = (function () {
   function init() {
     chatUpdateSetup();
     Api.getSessionId(function() {
-      Api.sendRequest('', null);
+      Api.sendRequest('', true);
     });
     setupInputBox();
   }
@@ -343,15 +343,8 @@ var ConversationPanel = (function () {
   }
 
   function sendMessage(text) {
-    // Retrieve the context from the previous server response
-    var context;
-    var latestResponse = Api.getResponsePayload();
-    if (latestResponse) {
-      context = latestResponse.context;
-    }
-
     // Send the user message
-    Api.sendRequest(text, context);
+    Api.sendRequest(text, false);
   }
 
   // Handles the submission of input
