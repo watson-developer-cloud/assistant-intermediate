@@ -1,5 +1,5 @@
 <h1 align="center" style="border-bottom: none;">🚀 Watson Assistant (formerly Conversation) Sample Application</h1>
-<h3 align="center">DEPRECATED: this repo is no longer actively maintained. It can still be used as reference, but may contain outdated or unpatched code.</h3>
+<h3 align="center">This Node.js app demonstrates the Watson Assistant service in a simple interface engaging in simulated banking tasks, utilising features such as cloud functions and actions.</h3>
 <p align="center">
   <a href="http://travis-ci.org/watson-developer-cloud/assistant-intermediate">
     <img alt="Travis" src="https://travis-ci.org/watson-developer-cloud/assistant-intermediate.svg?branch=master">
