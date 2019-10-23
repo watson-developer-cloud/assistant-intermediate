@@ -19,6 +19,7 @@
 var express = require('express'); // app server
 var bodyParser = require('body-parser'); // parser for post requests
 var AssistantV2 = require('ibm-watson/assistant/v2'); // watson sdk
+var IamAuthenticator = require('ibm-watson/auth').IamAuthenticator;
 
 var Actions = require('./functions/actions');
 var actions = new Actions();
@@ -37,8 +38,13 @@ app.use(bodyParser.json());
 
 // Create the service wrapper
 var assistant = new AssistantV2({
-  version: '2019-02-28'
+  version: '2019-02-28',
+  authenticator: new IamAuthenticator({
+    apikey: process.env.ASSISTANT_IAM_APIKEY
+  }),
+  url: process.env.ASSISTANT_IAM_URL,
 });
+
 var date = new Date();
 date.setMonth(date.getMonth() + 1);
 var initContext = {
@@ -80,8 +86,8 @@ app.post('/api/message', function (req, res) {
   }
 
   var payload = {
-    assistant_id: assistantId,
-    session_id: req.body.session_id,
+    assistantId: assistantId,
+    sessionId: req.body.session_id,
     input: {
       message_type : 'text',
       text : textIn,
@@ -98,8 +104,8 @@ app.post('/api/message', function (req, res) {
       return res.status(err.code || 500).json(err);
     }
 
-    searchDocs.addDocs(data, function () {
-      actions.testForAction(data, req.body.session_id).then(function (d) {
+    searchDocs.addDocs(data.result, function () {
+      actions.testForAction(data.result, req.body.session_id).then(function (d) {
         return res.json(d);
       }).catch(function (error) {
         return res.json(error);
@@ -126,7 +132,7 @@ app.get('/bank/locate', function (req, res) {
 
 app.get('/api/session', function (req, res) {
   assistant.createSession({
-    assistant_id: process.env.ASSISTANT_ID || '{assistant_id}',
+    assistantId: process.env.ASSISTANT_ID || '{assistant_id}',
   }, function (error, response) {
     if (error) {
       return res.send(error);

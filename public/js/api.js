@@ -39,8 +39,8 @@ var Api = (function() {
     http.setRequestHeader('Content-type', 'application/json');
     http.onreadystatechange = function () {
       if (http.readyState === XMLHttpRequest.DONE) {
-        var res = JSON.parse(http.responseText);
-        sessionId = res.session_id;
+        var res = JSON.parse(http.response);
+        sessionId = res.result.session_id;
         callback();
       }
     };
