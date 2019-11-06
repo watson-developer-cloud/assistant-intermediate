@@ -42,7 +42,7 @@ var assistant = new AssistantV2({
   authenticator: new IamAuthenticator({
     apikey: process.env.ASSISTANT_IAM_APIKEY
   }),
-  url: process.env.ASSISTANT_IAM_URL,
+  url: process.env.ASSISTANT_URL,
 });
 
 var date = new Date();
