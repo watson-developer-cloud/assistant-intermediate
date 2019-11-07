@@ -20,7 +20,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "body-parser": "^1.19.0",
-    "dotenv": "^6.2.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "ibm-watson": "^5.1.0"
   },
@@ -36,7 +36,7 @@
     "babel-eslint": "^10.0.3",
     "casperjs": "^1.1.4",
     "codecov": "^3.6.1",
-    "eslint": "^5.16.0",
+    "eslint": "^6.6.0",
     "jest": "^24.9.0",
     "phantomjs-prebuilt": "^2.1.16",
     "supertest": "^4.0.2"
