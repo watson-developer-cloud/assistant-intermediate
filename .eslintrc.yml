@@ -16,3 +16,5 @@ rules:
   semi:
     - error
     - always
+  no-prototype-builtins:
+    - off

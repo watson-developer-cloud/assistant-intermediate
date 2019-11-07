@@ -42,7 +42,7 @@ var assistant = new AssistantV2({
   authenticator: new IamAuthenticator({
     apikey: process.env.ASSISTANT_IAM_APIKEY
   }),
-  url: process.env.ASSISTANT_IAM_URL,
+  url: process.env.ASSISTANT_URL,
 });
 
 var date = new Date();
@@ -64,7 +64,7 @@ var initContext = {
   }
 };
 
-/* 
+/*
  * Endpoint to be call from the client side.
  * Required.body.firstcall is set when initialising chat and sends initial context (initContext)
  * Context is then set when required for actions.
@@ -95,7 +95,7 @@ app.post('/api/message', function (req, res) {
   };
 
   if (req.body.firstCall || req.body.context) {
-    payload.context =  req.body.context || initContext;    
+    payload.context =  req.body.context || initContext;
   }
 
   // Send the input to the assistant service

@@ -1,7 +1,7 @@
 // The ConversationPanel module is designed to handle
 // all display and behaviors of the conversation column of the app.
 /* eslint no-unused-vars: "off" */
-/* global Api: true, Common: true*/
+/* global Api: true */
 /* global UiActions: true, Common: true*/
 
 var ConversationPanel = (function () {
@@ -223,7 +223,7 @@ var ConversationPanel = (function () {
         }
         list += '</ul>';
       } else if (preference === 'button') {
-        
+
         list = '<br>';
         for (i = 0; i < optionsList.length; i++) {
           if (optionsList[i].value) {
